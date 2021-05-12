@@ -22,4 +22,10 @@ public class UserMock {
                 .name(NAME)
                 .build();
     }
+
+    public static User getWithId() {
+        User userMock = UserMock.get();
+        userMock.setId(ID);
+        return userMock;
+    }
 }
