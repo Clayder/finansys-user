@@ -1,16 +1,18 @@
 package com.clayder.finansys.user.app.user.service;
 
+import com.clayder.finansys.user.app.dto.UserDTO;
 import com.clayder.finansys.user.app.entity.User;
 import com.clayder.finansys.user.app.repository.IUserRepository;
 import com.clayder.finansys.user.app.service.IUserService;
 import com.clayder.finansys.user.app.service.UserService;
 import com.clayder.finansys.user.app.user.mock.UserMock;
-import com.clayder.finansys.user.core.entity.config.ApplicationConfig;
+import com.clayder.finansys.user.core.config.ApplicationConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,7 +35,7 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        this.service = new UserService(repository);
+        this.service = new UserService(repository, new ModelMapper());
     }
 
     @Test
@@ -54,5 +56,19 @@ public class UserServiceTest {
         assertThat(allUsers.get(0).getUpdatedAt()).isNull();
         assertThat(allUsers.get(0).getDeletedAt()).isNull();
     }
+
+    @Test
+    @DisplayName("Convert user list to DTO list.")
+    public void convertUserListToDTOList() {
+        List<User> mockList = new ArrayList<>();
+
+        Mockito.when(repository.findAll()).thenReturn(mockList);
+
+        List<UserDTO> userDTOList = service.mapList(mockList, UserDTO.class);
+
+        assertThat(userDTOList.get(0).getClass()).isEqualTo(UserDTO.class);
+    }
+
+
 
 }
