@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -28,7 +29,7 @@ public class UserRepositoryTest {
     IUserRepository repository;
 
     @Test
-    @DisplayName("Returning users by name.")
+    @DisplayName("Returning users by like name.")
     void findByUserNameTest() {
         User user = UserMock.get();
         entityManager.persist(user);
@@ -36,5 +37,16 @@ public class UserRepositoryTest {
         List<User> userList = repository.queryByNameLike(user.getName());
 
         assertThat(userList.size()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("Returning user by name.")
+    void getUserByNameTest() {
+        User user = UserMock.get();
+        entityManager.persist(user);
+
+        Optional<User> foundUser = repository.getByName(user.getName());
+
+        assertThat(foundUser.isPresent()).isTrue();
     }
 }
