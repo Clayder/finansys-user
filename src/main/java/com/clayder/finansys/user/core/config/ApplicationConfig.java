@@ -1,4 +1,4 @@
-package com.clayder.finansys.user.core.entity.config;
+package com.clayder.finansys.user.core.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
